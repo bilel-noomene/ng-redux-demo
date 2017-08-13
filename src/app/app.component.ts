@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
-import { Operation } from './common/operation.model';
+import { Operation } from './common/models/operation.model';
 import { State, Store } from '@ngrx/store';
-import { ADD_OPERATION, DECREMENT_OPERATION, INCREMENT_OPERATION, REMOVE_OPERATION, } from './common/operations';
+import * as operations from './common/actions/operations';
 import { Observable } from 'rxjs/Observable';
+import * as fromRoot from './common/reducers';
+
 
 @Component({
     selector: 'app-root',
@@ -10,36 +12,34 @@ import { Observable } from 'rxjs/Observable';
     styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-    title = 'app';
     public id = 0;
-    public operations: Observable<Array<Operation>>;
+    public operations: Observable<Operation[]>;
 
-    // initialize a new operation class instance
-    public operation: Operation = new Operation();
-
-    constructor(private _store: Store<State<Array<Operation>>>) {
-        this.operations = _store.select('operations');
+    constructor(private _store: Store<fromRoot.State>) {
+        this.operations = _store.let(fromRoot.getEntities)
     }
 
     addOperation(operation) {
-        this._store.dispatch({type: ADD_OPERATION , payload: {
-            id: ++ this.id, // simulating ID increments
-            reason: operation.reason,
-            amount: operation.amount
-        }});
+        this._store.dispatch(new operations.AddOperationAction({
+                id: ++this.id, // simulating ID increments
+                reason: operation.reason,
+                amount: operation.amount
+            })
+        );
     }
 
-    // Adding REMOVE_OPERATIOn , INCREMENT_OPERATION , DECREMENT_OPERATION
+
     incrementOperation(operation) {
-        this._store.dispatch({type: INCREMENT_OPERATION, payload: operation})
+        this._store.dispatch(new operations.IncrementOperationAction(operation))
     }
 
     decrementOperation(operation) {
-        this._store.dispatch({type: DECREMENT_OPERATION, payload: operation})
+        this._store.dispatch(new operations.DecrementOperationAction(operation))
     }
 
+
     deleteOperation(operation) {
-        this._store.dispatch({type: REMOVE_OPERATION, payload: operation})
+        this._store.dispatch(new operations.RemoveOperationAction(operation))
     }
 
 

@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
-import { Operation } from './common/operation.model';
+import { Operation } from './common/models/operation.model';
 
 @Component({
     selector: 'operations-list',
