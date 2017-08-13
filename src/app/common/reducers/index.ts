@@ -8,6 +8,7 @@ import { compose } from '@ngrx/core';
  its reducer function and state interface as a property.
 */
 import * as fromOperations from '../reducers/operations';
+import * as fromCurrencies from '../reducers/currencies';
 
 
 /*
@@ -15,11 +16,13 @@ import * as fromOperations from '../reducers/operations';
  */
 export interface State {
     operations: fromOperations.State;
+    currencies: fromCurrencies.State;
 }
 
 /* The reducers variable represents the map of all the reducer function that is used in the Meta Reducer */
 const reducers = {
     operations: fromOperations.reducer,
+    currencies: fromCurrencies.reducer
 };
 
 
@@ -38,5 +41,15 @@ export function getOperations(state$: Observable<State>) {
     return state$.select(state => state.operations);
 }
 
+export function getCurrencies(state$: Observable<State>) {
+    return state$.select(state => state.currencies);
+}
+
 
 export const getEntities = compose(fromOperations.getEntities, getOperations);
+
+export const getCurrencyEntities = compose(fromCurrencies.getCurrenciesEntities , getCurrencies);
+export const getSelectedCurrency = compose(fromCurrencies.getSelectedCurrency , getCurrencies);
+export const getCurrencyRates = compose(fromCurrencies.getRates , getCurrencies);
+
+

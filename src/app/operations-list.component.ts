@@ -10,6 +10,7 @@ import { Operation } from './common/models/operation.model';
 
 export class OperationsList {
     @Input() operations: Array<Operation>;
+    @Input() selectedCurrency;
 
     @Output() deleteOperation = new EventEmitter();
     @Output() incrementOperation = new EventEmitter();
